@@ -50,7 +50,7 @@ function mapToBlogPost(item: InstagramMediaItem): BlogPost {
   return {
     id: item.id,
     slug: `${slugify(firstLine) || 'post'}-${item.id.slice(-6)}`,
-    title: title || 'Post do Instagram', // Fallback se não houver título
+    title: title || '', // Título vazio se não houver caption
     excerpt,
     content: caption
       .split('\n')

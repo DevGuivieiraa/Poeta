@@ -8,20 +8,20 @@ export default async function Blog() {
   const posts = await getAllPosts();
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-20">
-      <div className="mb-16">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+      <div className="mb-12 sm:mb-16">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-4 sm:mb-6">
           Cantinho da Poesia
         </h1>
-        <p className="text-xl text-neutral-600 max-w-2xl">
+        <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl">
           Reflexões sobre poesia, processo criativo e a arte da palavra.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {posts.map((post) => (
           <article key={post.id} className="block">
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {/* Imagem quadrada */}
               <div className="aspect-square bg-neutral-200 overflow-hidden relative">
                 {post.image ? (
@@ -32,19 +32,19 @@ export default async function Blog() {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-400 text-sm">
+                  <div className="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-400 text-xs sm:text-sm">
                     Imagem do post
                   </div>
                 )}
               </div>
 
               {/* Conteúdo */}
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 <div className="flex items-center gap-3 text-xs text-neutral-500">
                   <time dateTime={post.date}>{formatDate(post.date)}</time>
                 </div>
 
-                <h2 className="text-xl font-serif leading-tight line-clamp-3">
+                <h2 className="text-lg sm:text-xl font-serif leading-tight line-clamp-3">
                   {post.title}
                 </h2>
               </div>
@@ -54,8 +54,8 @@ export default async function Blog() {
       </div>
 
       {posts.length === 0 && (
-        <div className="text-center py-20">
-          <p className="text-neutral-500">Nenhum post encontrado.</p>
+        <div className="text-center py-12 sm:py-20">
+          <p className="text-neutral-500 text-sm sm:text-base">Nenhum post encontrado.</p>
         </div>
       )}
     </div>

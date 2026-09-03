@@ -9,7 +9,7 @@ export default function Biografia() {
     { id: 3, filename: 'vanilson3.jpg.jpg', alt: 'Vanilson Reis', caption: 'Apresentação e palestras' },
     { id: 4, filename: 'vanilson4.jpg.jpg', alt: 'Vanilson Reis', caption: 'Processo criativo' },
     { id: 5, filename: 'vanilson5.jpg.jpg', alt: 'Vanilson Reis', caption: 'Encontros literários' },
-    { id: 6, filename: 'vanilson6.jpg.jpg', alt: 'Vanilson Reis', caption: 'Vanilson Reis' },
+    { id: 6, filename: 'vanilson6.jpg.JPG', alt: 'Vanilson Reis', caption: 'Vanilson Reis' },
   ];
 
   const tabs = [
@@ -115,13 +115,13 @@ export default function Biografia() {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-20">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
       {/* Cabeçalho da página */}
-      <div className="mb-16">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-6">
+      <div className="mb-12 sm:mb-16">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-4 sm:mb-6">
           Biografia
         </h1>
-        <p className="text-xl text-neutral-600 max-w-2xl">
+        <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl">
           Conheça a trajetória de Vanilson Reis, poeta e palestrante.
         </p>
       </div>

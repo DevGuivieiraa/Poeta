@@ -115,36 +115,36 @@ export default function Contato() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-20">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
       {/* Cabeçalho da página */}
-      <div className="mb-16">
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-6">
+      <div className="mb-12 sm:mb-16">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-serif font-light mb-4 sm:mb-6">
           Contato
         </h1>
-        <p className="text-xl text-neutral-600 max-w-2xl">
+        <p className="text-lg sm:text-xl text-neutral-600 max-w-2xl">
           Entre em contato para palestras, entrevistas ou informações sobre os livros.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-5 gap-12">
+      <div className="grid md:grid-cols-5 gap-8 md:gap-12">
         {/* Formulário de contato */}
         <div className="md:col-span-3">
           {/* Mensagem de sucesso */}
           {showSuccess && (
-            <div className="mb-8 p-6 bg-green-50 border border-green-200 text-green-800">
-              <h3 className="font-medium mb-2">Mensagem enviada com sucesso!</h3>
-              <p className="text-sm">
+            <div className="mb-6 sm:mb-8 p-4 sm:p-6 bg-green-50 border border-green-200 text-green-800">
+              <h3 className="font-medium mb-2 text-sm sm:text-base">Mensagem enviada com sucesso!</h3>
+              <p className="text-xs sm:text-sm">
                 Obrigado pelo contato. Retornaremos em breve.
               </p>
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* Nome */}
             <div>
               <label
                 htmlFor="nome"
-                className="block text-sm font-medium mb-2"
+                className="block text-xs sm:text-sm font-medium mb-2"
               >
                 Nome *
               </label>
@@ -154,13 +154,13 @@ export default function Contato() {
                 name="nome"
                 value={formData.nome}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border text-sm sm:text-base ${
                   errors.nome ? 'border-red-500' : 'border-neutral-300'
                 } focus:border-black focus:outline-none transition-colors`}
                 placeholder="Seu nome completo"
               />
               {errors.nome && (
-                <p className="mt-1 text-sm text-red-600">{errors.nome}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.nome}</p>
               )}
             </div>
 
@@ -168,7 +168,7 @@ export default function Contato() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium mb-2"
+                className="block text-xs sm:text-sm font-medium mb-2"
               >
                 E-mail *
               </label>
@@ -178,13 +178,13 @@ export default function Contato() {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border text-sm sm:text-base ${
                   errors.email ? 'border-red-500' : 'border-neutral-300'
                 } focus:border-black focus:outline-none transition-colors`}
                 placeholder="seu@email.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.email}</p>
               )}
             </div>
 
@@ -192,7 +192,7 @@ export default function Contato() {
             <div>
               <label
                 htmlFor="assunto"
-                className="block text-sm font-medium mb-2"
+                className="block text-xs sm:text-sm font-medium mb-2"
               >
                 Assunto *
               </label>
@@ -202,13 +202,13 @@ export default function Contato() {
                 name="assunto"
                 value={formData.assunto}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border text-sm sm:text-base ${
                   errors.assunto ? 'border-red-500' : 'border-neutral-300'
                 } focus:border-black focus:outline-none transition-colors`}
                 placeholder="Sobre o que você quer falar?"
               />
               {errors.assunto && (
-                <p className="mt-1 text-sm text-red-600">{errors.assunto}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.assunto}</p>
               )}
             </div>
 
@@ -216,7 +216,7 @@ export default function Contato() {
             <div>
               <label
                 htmlFor="mensagem"
-                className="block text-sm font-medium mb-2"
+                className="block text-xs sm:text-sm font-medium mb-2"
               >
                 Mensagem *
               </label>
@@ -226,13 +226,13 @@ export default function Contato() {
                 value={formData.mensagem}
                 onChange={handleChange}
                 rows={6}
-                className={`w-full px-4 py-3 border ${
+                className={`w-full px-3 sm:px-4 py-2 sm:py-3 border text-sm sm:text-base ${
                   errors.mensagem ? 'border-red-500' : 'border-neutral-300'
                 } focus:border-black focus:outline-none transition-colors resize-none`}
                 placeholder="Escreva sua mensagem..."
               />
               {errors.mensagem && (
-                <p className="mt-1 text-sm text-red-600">{errors.mensagem}</p>
+                <p className="mt-1 text-xs sm:text-sm text-red-600">{errors.mensagem}</p>
               )}
             </div>
 
@@ -240,7 +240,7 @@ export default function Contato() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`w-full py-4 px-8 text-white font-medium tracking-wider transition-colors ${
+              className={`w-full py-3 sm:py-4 px-6 sm:px-8 text-white font-medium tracking-wider transition-colors text-sm sm:text-base ${
                 isSubmitting
                   ? 'bg-neutral-400 cursor-not-allowed'
                   : 'bg-black hover:bg-neutral-800'
@@ -249,7 +249,7 @@ export default function Contato() {
               {isSubmitting ? 'ENVIANDO...' : 'ENVIAR MENSAGEM'}
             </button>
 
-            <p className="text-sm text-neutral-500">
+            <p className="text-xs sm:text-sm text-neutral-500">
               * Campos obrigatórios
             </p>
           </form>
@@ -257,18 +257,18 @@ export default function Contato() {
 
         {/* Informações de contato direto */}
         <div className="md:col-span-2">
-          <div className="bg-neutral-50 p-8 border border-neutral-200">
-            <h2 className="text-2xl font-serif mb-6">Contato Direto</h2>
+          <div className="bg-neutral-50 p-6 sm:p-8 border border-neutral-200">
+            <h2 className="text-xl sm:text-2xl font-serif mb-4 sm:mb-6">Contato Direto</h2>
 
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* E-mail */}
               <div>
-                <h3 className="text-sm font-medium text-neutral-500 mb-2">
+                <h3 className="text-xs sm:text-sm font-medium text-neutral-500 mb-2">
                   E-MAIL
                 </h3>
                 <a
                   href="mailto:contato@vanilsonreis.com"
-                  className="text-lg hover:text-neutral-600 transition-colors"
+                  className="text-base sm:text-lg hover:text-neutral-600 transition-colors break-all"
                 >
                   contato@vanilsonreis.com
                 </a>
@@ -276,23 +276,23 @@ export default function Contato() {
 
               {/* WhatsApp */}
               <div>
-                <h3 className="text-sm font-medium text-neutral-500 mb-2">
+                <h3 className="text-xs sm:text-sm font-medium text-neutral-500 mb-2">
                   WHATSAPP
                 </h3>
                 <a
                   href="https://wa.me/5561999999999"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-lg hover:text-neutral-600 transition-colors inline-flex items-center gap-2"
+                  className="text-base sm:text-lg hover:text-neutral-600 transition-colors inline-flex items-center gap-2"
                 >
                   (61) 99999-9999
-                  <span className="text-sm">↗</span>
+                  <span className="text-xs sm:text-sm">↗</span>
                 </a>
               </div>
 
               {/* Redes sociais */}
-              <div className="pt-6 border-t border-neutral-200">
-                <h3 className="text-sm font-medium text-neutral-500 mb-4">
+              <div className="pt-4 sm:pt-6 border-t border-neutral-200">
+                <h3 className="text-xs sm:text-sm font-medium text-neutral-500 mb-3 sm:mb-4">
                   REDES SOCIAIS
                 </h3>
                 <div className="space-y-3">
@@ -300,7 +300,7 @@ export default function Contato() {
                     href="https://instagram.com/vanilsonreis4"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block hover:text-neutral-600 transition-colors"
+                    className="block hover:text-neutral-600 transition-colors text-sm sm:text-base"
                   >
                     Instagram
                   </a>
@@ -309,8 +309,8 @@ export default function Contato() {
             </div>
 
             {/* Horário de atendimento */}
-            <div className="mt-8 pt-6 border-t border-neutral-200">
-              <p className="text-sm text-neutral-600">
+            <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-neutral-200">
+              <p className="text-xs sm:text-sm text-neutral-600">
                 Respondemos normalmente em até 48 horas úteis.
               </p>
             </div>
