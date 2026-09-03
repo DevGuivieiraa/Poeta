@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { getAllPosts, formatDate } from '@/lib/blog';
 
-export default function Home() {
+export default async function Home() {
   // Livros em destaque
   const featuredBooks = [
     {
@@ -18,7 +19,21 @@ export default function Home() {
       slug: 'a-meninada-tambem-faz-2',
       tema: 'Revista',
     },
+    {
+      id: 3,
+      title: 'O Diário de Fred',
+      year: '2018',
+      slug: 'o-diario-de-fred',
+      tema: 'Um diário',
+    },
   ];
+
+  // Buscar os 3 posts mais recentes que tenham imagem
+  const allPosts = await getAllPosts();
+  const postsWithImages = allPosts.filter(post => post.image);
+  
+  // Garante que sempre teremos 3 posts para exibir
+  const latestPosts = postsWithImages.slice(0, 3);
 
   return (
     <div>
@@ -68,8 +83,69 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Seção Cantinho da Poesia */}
+      {latestPosts.length > 0 && (
+        <section className="py-12 sm:py-16 md:py-24 bg-white">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
+              <div>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-light mb-2 sm:mb-3">
+                  Cantinho da Poesia
+                </h2>
+                <p className="text-neutral-600 text-sm sm:text-base">Últimas publicações</p>
+              </div>
+              <Link
+                href="/blog"
+                className="text-xs sm:text-sm tracking-wider hover:text-neutral-600 transition-colors flex items-center gap-2"
+              >
+                VER TODOS
+                <span>→</span>
+              </Link>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {latestPosts.map((post) => (
+                <article key={post.id} className="block">
+                  <div className="space-y-3 sm:space-y-4">
+                    {/* Imagem quadrada */}
+                    <div className="aspect-square bg-neutral-200 overflow-hidden relative">
+                      {post.image ? (
+                        <Image
+                          src={post.image}
+                          alt={post.title || 'Post do Instagram'}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-400 text-xs sm:text-sm">
+                          Imagem do post
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Conteúdo */}
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex items-center gap-3 text-xs text-neutral-500">
+                        <time dateTime={post.date}>{formatDate(post.date)}</time>
+                      </div>
+
+                      {post.title && (
+                        <h3 className="text-lg sm:text-xl font-serif leading-tight line-clamp-3">
+                          {post.title}
+                        </h3>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Seção de Livros em Destaque */}
-      <section className="py-12 sm:py-16 md:py-24 bg-white">
+      <section className="py-12 sm:py-16 md:py-24 bg-neutral-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 sm:mb-12 gap-4">
             <div>
@@ -87,7 +163,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {featuredBooks.map((book) => (
               <Link
                 key={book.id}
