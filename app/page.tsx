@@ -28,12 +28,10 @@ export default async function Home() {
     },
   ];
 
-  // Buscar os 3 posts mais recentes que tenham imagem
+  // Buscar os 3 posts mais recentes do Instagram que tenham imagem
   const allPosts = await getAllPosts();
-  const postsWithImages = allPosts.filter(post => post.image);
-  
-  // Garante que sempre teremos 3 posts para exibir
-  const latestPosts = postsWithImages.slice(0, 3);
+  const instagramPosts = allPosts.filter(post => post.category === 'Instagram' && post.image);
+  const latestPosts = instagramPosts.slice(0, 3);
 
   return (
     <div>

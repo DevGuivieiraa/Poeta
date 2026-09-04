@@ -300,11 +300,16 @@ export const blogPosts: BlogPost[] = [
 ];
 
 import { fetchInstagramPosts } from './instagram';
+import { fetchTikTokPosts } from './tiktok';
 
-// Função para buscar todos os posts (Instagram, com fallback para os mocks)
 export async function getAllPosts(): Promise<BlogPost[]> {
-  const instagramPosts = await fetchInstagramPosts();
-  const posts = instagramPosts.length > 0 ? instagramPosts : blogPosts;
+  const [instagramPosts, tiktokPosts] = await Promise.all([
+    fetchInstagramPosts(),
+    fetchTikTokPosts(),
+  ]);
+
+  const socialPosts = [...instagramPosts, ...tiktokPosts];
+  const posts = socialPosts.length > 0 ? socialPosts : blogPosts;
   return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
