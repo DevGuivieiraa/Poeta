@@ -1,15 +1,63 @@
-import { getAllPosts, formatDate } from '@/lib/blog';
+'use client';
+
+import { formatDate } from '@/lib/blog';
 import Image from 'next/image';
+import { useState, useEffect } from 'react';
 
-// Força revalidação em cada requisição (dados sempre atualizados)
-export const revalidate = 0;
+interface BlogPost {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  readTime: string;
+  image?: string;
+  category: string;
+}
 
-export default async function Blog() {
-  const posts = await getAllPosts();
+export default function Blog() {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadPosts() {
+      try {
+        // Adiciona timestamp para evitar cache do browser
+        const timestamp = new Date().getTime();
+        const response = await fetch(`/api/posts?t=${timestamp}`, {
+          cache: 'no-store',
+        });
+        if (!response.ok) {
+          throw new Error('Erro ao carregar posts');
+        }
+        const allPosts = await response.json();
+        console.log('Posts carregados:', allPosts.length);
+        console.log('Posts TikTok:', allPosts.filter((p: BlogPost) => p.category === 'TikTok').length);
+        setPosts(allPosts);
+      } catch (error) {
+        console.error('Erro ao carregar posts:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadPosts();
+  }, []);
   
   // Separar posts por tipo
   const instagramPosts = posts.filter(post => post.category === 'Instagram');
   const tiktokPosts = posts.filter(post => post.category === 'TikTok');
+
+  if (isLoading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
+        <div className="text-center py-12 sm:py-20">
+          <p className="text-neutral-500 text-sm sm:text-base">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-20">
@@ -83,26 +131,49 @@ export default async function Blog() {
             {tiktokPosts.map((post) => {
               // Extrai o link do TikTok do conteúdo
               const linkMatch = post.content.match(/href="([^"]+)"/);
-              const videoUrl = linkMatch ? linkMatch[1] : '#';
+              const videoUrl = linkMatch ? linkMatch[1] : '';
+              
+              // Extrai o ID do vídeo da URL do TikTok
+              // Suporta tanto player/v1 quanto formato padrão video/
+              const videoIdMatch = videoUrl.match(/(?:video\/|player\/v1\/|embed\/v2\/)(\d+)/);
+              const videoId = videoIdMatch ? videoIdMatch[1] : '';
+              
+              // Tenta usar o embed_link original se existir, senão usa o formato embed/v2
+              let embedUrl = '';
+              if (videoUrl.includes('player/v1/') || videoUrl.includes('embed')) {
+                // Se já é uma URL de player/embed, usa ela diretamente
+                embedUrl = videoUrl.split('?')[0] + '?autoplay=0&muted=0';
+              } else if (videoId) {
+                // Senão, cria uma URL de embed
+                embedUrl = `https://www.tiktok.com/embed/v2/${videoId}?lang=pt-BR&autoplay=0&muted=0`;
+              }
+              
+              console.log('TikTok Video Debug:', { videoUrl, videoId, embedUrl });
 
               return (
-                <a
+                <button
                   key={post.id}
-                  href={videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block cursor-pointer"
+                  onClick={() => {
+                    console.log('Clicou no vídeo, embedUrl:', embedUrl);
+                    if (embedUrl) {
+                      setSelectedVideo(embedUrl);
+                    } else {
+                      console.error('Embed URL está vazio');
+                    }
+                  }}
+                  className="group block cursor-pointer text-left w-full"
+                  disabled={!embedUrl}
                 >
                   <div className="space-y-3">
-                    {/* Card de vídeo vertical */}
-                    <div className="aspect-[9/16] bg-neutral-200 overflow-hidden relative">
+                    {/* Card de vídeo vertical - proporção oficial do TikTok */}
+                    <div className="aspect-[9/19.5] bg-neutral-200 overflow-hidden relative rounded-lg">
                       {post.image ? (
                         <>
                           <Image
                             src={post.image}
                             alt={post.title || 'Vídeo do TikTok'}
                             fill
-                            className="object-cover transition-transform duration-300 group-hover:scale-105"
+                            className="object-contain bg-black transition-transform duration-300 group-hover:scale-105"
                             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                           />
                           
@@ -140,11 +211,56 @@ export default async function Blog() {
                       )}
                     </div>
                   </div>
-                </a>
+                </button>
               );
             })}
           </div>
         </section>
+      )}
+
+      {/* Modal do TikTok */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 animate-fadeIn"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <button
+            onClick={() => setSelectedVideo(null)}
+            className="absolute top-4 right-4 text-white hover:text-neutral-300 transition-colors z-10"
+            aria-label="Fechar vídeo"
+          >
+            <svg
+              className="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-md bg-black rounded-lg overflow-hidden shadow-2xl"
+          >
+            {/* Player do TikTok embutido */}
+            <div className="relative" style={{ paddingBottom: '177.78%' }}>
+              <iframe
+                src={selectedVideo}
+                className="absolute inset-0 w-full h-full"
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                title="Vídeo do TikTok"
+              />
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Mensagem quando não há posts */}

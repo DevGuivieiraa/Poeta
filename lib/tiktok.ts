@@ -42,6 +42,11 @@ function mapToBlogPost(item: TikTokVideoItem): BlogPost {
   const firstLine = description.split('\n')[0] || 'Novo vídeo';
   const title = firstLine.length > 70 ? firstLine.slice(0, 70) + '...' : firstLine;
 
+  console.log(`📹 Mapeando vídeo ${item.id}:`, {
+    embed_link: item.embed_link,
+    cover: item.cover_image_url.substring(0, 50) + '...',
+  });
+
   return {
     id: `tiktok-${item.id}`,
     slug: `tiktok-${item.id}`,
@@ -82,7 +87,7 @@ export async function fetchTikTokPosts(): Promise<BlogPost[]> {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(requestBody),
-        next: { revalidate: 1800 },
+        cache: 'no-store', // Sem cache - sempre busca dados frescos
       }
     );
 
@@ -105,6 +110,9 @@ export async function fetchTikTokPosts(): Promise<BlogPost[]> {
       console.log('2. Vídeo está privado');
       console.log('3. Vídeo é muito recente (aguarde alguns minutos)');
       console.log('4. A conta não tem vídeos públicos ainda');
+    } else {
+      console.log('📹 Vídeos encontrados (IDs):', videos.map(v => v.id).join(', '));
+      console.log('📅 Datas de criação:', videos.map(v => new Date(v.create_time * 1000).toLocaleString('pt-BR')).join(' | '));
     }
     
     console.log('===================');
